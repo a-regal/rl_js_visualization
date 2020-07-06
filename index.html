@@ -9,8 +9,8 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://unpkg.com/d3-simple-slider"></script>
     <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
-
-    <!-- <script src="./load_data.js"></script> -->
+    <script src="./visualization.js"></script>
+        <!-- <script src="./load_data.js"></script> -->
   </head>
   <body>
     <h2>Simple</h2>
@@ -24,15 +24,28 @@
 
     <script>
         //Map plotting
-        const svg = d3.select("svg")
-        let projection = d3.geoMercator();
-        let path = d3.geoPath().projection(projection)
-        function drawMap(err, network) {
-          if (err) throw err;
-          svg.append("path").datum(network.features)
-        }
+        var width = 960,
+            height = 500;
 
-        d3.json("./downtown.geojson", drawMap)
+        var projection = d3.geoMercator();
+
+        var path = d3.geoPath()
+          .projection(projection)
+
+        var svg = d3.select("body").append("svg")
+                    .attr("width", width)
+                    .attr("height", height);
+
+        var url = "https://raw.githubusercontent.com/a-regal/thesis_js_visualization/master/downtown.geojson";
+
+        d3.json(url, function(error, network) {
+          if (error) console.log(error);
+          console.log("geojson", network);
+          svg.selectAll("path")
+            .data(network.features)
+            .enter().append("path")
+            .attr("d", path)
+        });
       </script>
 
       <script type="text/javascript">
