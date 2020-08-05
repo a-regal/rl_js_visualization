@@ -3,7 +3,6 @@ const sess = new onnx.InferenceSession();
 const loadingModelPromise = sess.loadModel("inputs/actor_critic.onnx");
 
 async function updatePredictions() {
-	console.log('Updating predictions')
   // Get input tensor
   let input_tensor = [
 	  slider_co2.value,
@@ -12,17 +11,13 @@ async function updatePredictions() {
 	  slider_pmx.value,
 	  slider_noise.value,
 	  slider_fuel.value
-  ]
-
-	console.log(input_tensor)
+  ];
   const input = new onnx.Tensor(new Float32Array(input_tensor), "float32", [1,6]);
 
   await loadingModelPromise;
   let outputMap = await sess.run([input]);
   let outputTensor = outputMap.values().next().value;
   let predictions = outputTensor.data;
-
-	console.log(predictions)
 
   for (let i = 0; i < 2760; i++) {
 	  if (predictions[i] > 0) {
@@ -55,24 +50,25 @@ let slider_pmx = new Bokeh.Widgets.Slider({start:0, end:1, value:0.5, step:.01, 
 let slider_noise = new Bokeh.Widgets.Slider({start:0, end:1, value:0.5, step:.01, title:"Noise"})
 let slider_fuel = new Bokeh.Widgets.Slider({start:0, end:1, value:0.5, step:.01, title:"Fuel"})
 
-// //Create compute button
-const button = new Bokeh.Widgets.Button({
+//Create compute button
+let button = new Bokeh.Widgets.Button({
 	button_type:'success',
 	label:'Apply regulation',
-	//js_event_callbacks: {'click': updatePredictions}
+	on_click: updatePredictions()
 });
 
-button.callback = {
-	execute(_obj, {}) {
-		console.log('Hi')
-		updatePredictions();
-	}
-}
+// function(button){console.log('hello')}
+// {
+// 	execute(_obj, {}) {
+// 		console.log('Hi')
+// 		updatePredictions();
+// 	}
+// }
 
 // make a plot with some tools
 let plot = Bokeh.Plotting.figure({
     title:'Red vial del Centro de Lima',
-    // tools: "pan,wheel_zoom,box_zoom,reset,save",
+    tools: "pan,wheel_zoom,box_zoom,reset,save",
     height: 600,
     width: 600
 });
@@ -85,61 +81,28 @@ plot.patches({ field: "xs" }, { field: "ys" }, {
 		line_color: {'field': 'empty', 'transform': color_mapper},
 });
 
-// let layout = new Bokeh.Grid({
-// 	children:[slider_co2, slider_co, slider_nox, slider_pmx, slider_fuel, slider_noise],
-// 	nrows: 6,
-// 	ncols:2,
-// });
+//Create column for sliders
+let slider_column = new Bokeh.Column({children:[
+	slider_co2,
+	slider_co,
+	slider_nox,
+	slider_pmx,
+	slider_noise,
+	slider_fuel,
+	//button
+]})
 
-// let layout = Bokeh.Plotting.gridplot({
-// 	children:[slider_co2, slider_co, slider_nox, slider_pmx, slider_fuel, slider_noise],
-// 	nrows: 6,
-// 	ncols:2,
-// });
+//Create column for plot
+let plot_column = new Bokeh.Column({children:[plot]})
 
-// let layout = new Bokeh.Plotting.gridplot(
-//                  [[slider_co2, slider_co, slider_nox, slider_pmx, slider_fuel, slider_noise]],
-//                  {plot_width:600, plot_height:600})
+//Create row to store both elements side by side
+let final = new Bokeh.Row({children:
+	[slider_column, plot_column]})
 
-// show the plot, appending it to the end of the current section
-// Bokeh.Plotting.show(layout);
-Bokeh.Plotting.show([
-	slider_co2, slider_co, slider_nox,
-	slider_pmx, slider_noise, slider_fuel,
-	button, plot]);
+//Add plot to the layout
+Bokeh.Plotting.show(final)
 
-// button.js_event_callbacks = {'click': updatePredictions, 'tap': updatePredictions}
-var addDataButton = document.createElement("Button");
-addDataButton.appendChild(document.createTextNode("Update Regulation"));
-document.currentScript.parentElement.appendChild(addDataButton);
-addDataButton.addEventListener("click", updatePredictions);
-
-// var plt = Bokeh.Plotting;
-//
-// var bar_data = [
-//     ['City', '2010 Population', '2000 Population'],
-//     ['NYC', 8175000, 8008000],
-//     ['LA', 3792000, 3694000],
-//     ['Chicago', 2695000, 2896000],
-//     ['Houston', 2099000, 1953000],
-//     ['Philadelphia', 1526000, 1517000],
-// ];
-//
-// var p1 = Bokeh.Charts.bar(bar_data, {
-//     axis_number_format: "0.[00]a"
-// });
-// var p2 = Bokeh.Charts.bar(bar_data, {
-//     axis_number_format: "0.[00]a",
-//     stacked: true
-// });
-// var p3 = Bokeh.Charts.bar(bar_data, {
-//     axis_number_format: "0.[00]a",
-//     orientation: "vertical"
-// });
-// var p4 = Bokeh.Charts.bar(bar_data, {
-//     axis_number_format: "0.[00]a",
-//     orientation: "vertical",
-//     stacked: true
-// });
-//
-// plt.show(plt.gridplot([[p1, p2], [p3, p4]], {plot_width:350, plot_height:350}));
+// button.js_event_callbacks = {
+// 	'on_click': updatePredictions,
+// 	'click': updatePredictions,
+// }

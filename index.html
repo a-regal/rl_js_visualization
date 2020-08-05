@@ -9,8 +9,14 @@
     <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.1.1.min.js" integrity="sha384-cT9JaBz7GiRXdENrJLZNSC6eMNF3nh3fa5fTF51Svp+ukxPdwcU5kGXGPBgDCa2j" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-api-2.1.1.min.js" integrity="sha384-i2RsfqLVG6PTrWCD55m8pYN9N2XZRkYVASzqjzp79o0OpPmcp+APyuwCfItW7Kn2" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/onnxjs/dist/onnx.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX" crossorigin="anonymous">
   </head>
   <body>
       <script type="text/javascript" src="plot.js"></script>
+      <button id='update' class="btn btn-success"> Update Regulation </button>
   </body>
+  <script>
+    let updateButton = document.getElementById('update');
+    updateButton.addEventListener("click", updatePredictions);
+  </script>
 </html>
