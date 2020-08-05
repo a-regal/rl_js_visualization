@@ -1,77 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Test Pytorch ONNX</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/onnxjs/dist/onnx.min.js"> </script>
-    <script src="https://unpkg.com/shapefile@0.6"></script>
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="https://unpkg.com/d3-simple-slider"></script>
-    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
-    <script src="./visualization.js"></script>
-        <!-- <script src="./load_data.js"></script> -->
+    <title>Bokeh Plot</title>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.1.1.min.js" integrity="sha384-kLr4fYcqcSpbuI95brIH3vnnYCquzzSxHPU6XGQCIkQRGJwhg0StNbj1eegrHs12" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.1.1.min.js" integrity="sha384-xIGPmVtaOm+z0BqfSOMn4lOR6ciex448GIKG4eE61LsAvmGj48XcMQZtKcE/UXZe" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.1.1.min.js" integrity="sha384-Dc9u1wF/0zApGIWoBbH77iWEHtdmkuYWG839Uzmv8y8yBLXebjO9ZnERsde5Ln/P" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.1.1.min.js" integrity="sha384-cT9JaBz7GiRXdENrJLZNSC6eMNF3nh3fa5fTF51Svp+ukxPdwcU5kGXGPBgDCa2j" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-api-2.1.1.min.js" integrity="sha384-i2RsfqLVG6PTrWCD55m8pYN9N2XZRkYVASzqjzp79o0OpPmcp+APyuwCfItW7Kn2" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/onnxjs/dist/onnx.min.js"></script>
   </head>
   <body>
-    <h2>Simple</h2>
-    <div class="row align-items-center">
-      <div class="col-sm-2"><p id="value-simple"></p></div>
-      <div class="col-sm"><div id="slider-simple"></div></div>
-    </div>
-    <div class="">
-      <svg width="960" height="600"></svg>
-    </div>
-
-    <script>
-        //Map plotting
-        var width = 960,
-            height = 500;
-
-        var projection = d3.geoMercator();
-
-        var path = d3.geoPath()
-          .projection(projection)
-
-        var svg = d3.select("body").append("svg")
-                    .attr("width", width)
-                    .attr("height", height);
-
-        var url = "https://raw.githubusercontent.com/a-regal/thesis_js_visualization/master/downtown.geojson";
-
-        d3.json(url, function(error, network) {
-          if (error) console.log(error);
-          console.log("geojson", network);
-          svg.selectAll("path")
-            .data(network.features)
-            .enter().append("path")
-            .attr("d", path)
-        });
-      </script>
-
-      <script type="text/javascript">
-        let sliderSimple = d3
-          .sliderBottom()
-          .min(0)
-          .max(1)
-          .width(300)
-          .step(0.01)
-          .on('onchange', val => {
-            d3.select('p#value-simple').text(d3.format('.2')(val));
-          });
-
-        let gSimple = d3
-          .select('div#slider-simple')
-          .append('svg')
-          .attr('width', 500)
-          .attr('height', 100)
-          .append('g')
-          .attr('transform', 'translate(30,30)');
-
-        gSimple.call(sliderSimple);
-
-        d3.select('p#value-simple').text(d3.format('.2')(sliderSimple.value()));
-      </script>
-
+      <script type="text/javascript" src="plot.js"></script>
   </body>
-
 </html>
